@@ -1,0 +1,16 @@
+#install package
+sudo apt install build-essential;
+cd DINO;
+pip install -r requirements.txt;
+pip install opencv-python;
+apt-get update && apt-get install ffmpeg libsm6 libxext6  -y;
+cd models/dino/ops;
+python setup.py build install;
+python test.py;
+
+sh onstart.sh 
+
+#train DINO
+bash scripts/DINO_train_dist_swin.sh ../nuimages/ ../swin_large_patch4_window12_384_22k.pth
+
+
