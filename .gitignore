@@ -39,3 +39,5 @@ nuimages/
 results/
 train2017/
 val2017/
+DINO/swin_large_patch4_window12_384_22k.pth
+coco/
