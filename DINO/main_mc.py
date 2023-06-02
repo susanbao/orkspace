@@ -77,6 +77,7 @@ def get_args_parser():
     parser.add_argument('--test_sample_size', default=1000, type=int,
                         help='number of selected test samples')
     parser.add_argument('--result_json_path', type=str, default='', help='path of json file which save loss/AP/AR result')
+    parser.add_argument('--idx_json_path', type=str, default='', help='path of json file which contain the indexes')
     
     return parser
 
@@ -107,6 +108,12 @@ def save_eval_metric(test_stats, args):
         json_object = {0: results}
         with open(path, "w") as outfile:
             json.dump(json_object, outfile)
+            
+def read_idxs_from_json(args):
+    path = args.idx_json_path
+    with open(path, 'r') as openfile:
+        json_object = json.load(openfile)
+    return json_object['idx']
 
 def main(args):
     utils.init_distributed_mode(args)
@@ -256,7 +263,10 @@ def main(args):
         sampler_val = DistributedSampler(dataset_val, shuffle=False)
     else:
         # sampler_train = torch.utils.data.RandomSampler(dataset_train)
-        sampler_val = test_data_sample(dataset_val, args)
+        idxs = None
+        if args.active_test_type == "ASE":
+            idxs = read_idxs_from_json(args)
+        sampler_val = test_data_sample(dataset_val, args, idxs)
 
 #     batch_sampler_train = torch.utils.data.BatchSampler(
 #         sampler_train, args.batch_size, drop_last=True)

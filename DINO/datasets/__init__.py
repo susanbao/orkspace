@@ -3,7 +3,7 @@ import torch.utils.data
 import torchvision
 
 from .coco import build as build_coco
-from .mc_sample import MCSampler
+from .mc_sample import MCSampler, SeqPartialSampler
 
 
 def get_coco_api_from_dataset(dataset):
@@ -31,9 +31,11 @@ def build_dataset(image_set, args):
         return build_vanke(image_set, args)
     raise ValueError(f'dataset {args.dataset_file} not supported')
 
-def test_data_sample(dataset_val, args):
+def test_data_sample(dataset_val, args, idxs = None):
     if args.active_test_type == 'None':
         return torch.utils.data.SequentialSampler(dataset_val)
     if args.active_test_type == 'MC': # MC sample
         return MCSampler(dataset_val, args.test_sample_size)
+    if args.active_test_type == 'ASE':
+        return SeqPartialSampler(dataset_val, idxs)
     raise ValueError(f'active_test_type {args.active_test_type} not supported')

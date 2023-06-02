@@ -21,3 +21,5 @@ nohup python run_commands.py >results/SWIN_MC_sample_10_runs.logs 2>results/SWIN
 nohup python run_commands.py >results/MC_sample_90_runs.logs 2>results/MC_sample_90_runs.err&
 
 nohup python run_commands.py >results/SWIN_MC_sample_90_runs.logs 2>results/SWIN_MC_sample_90_runs.err&
+
+nohup python run_commands.py >results/ASE_sample_10_runs.logs 2>results/ASE_sample_10_runs.err&
