@@ -36,6 +36,6 @@ def test_data_sample(dataset_val, args, idxs = None):
         return torch.utils.data.SequentialSampler(dataset_val)
     if args.active_test_type == 'MC': # MC sample
         return MCSampler(dataset_val, args.test_sample_size)
-    if args.active_test_type == 'ASE':
+    if args.active_test_type[:3] == 'ASE':
         return SeqPartialSampler(dataset_val, idxs)
     raise ValueError(f'active_test_type {args.active_test_type} not supported')

@@ -264,7 +264,7 @@ def main(args):
     else:
         # sampler_train = torch.utils.data.RandomSampler(dataset_train)
         idxs = None
-        if args.active_test_type == "ASE":
+        if args.active_test_type[:3] == "ASE":
             idxs = read_idxs_from_json(args)
         sampler_val = test_data_sample(dataset_val, args, idxs)
 

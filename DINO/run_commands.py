@@ -71,15 +71,22 @@ import time
 # ASE ResNet 5 scale, after active_test_demo.ipynb
 # python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE --test_sample_size 50 --result_json_path ./results/ASE_R50_10_runs.json --seed 1028 --idx_json_path ./results/ASE_samples/samples_50_1028.json --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 
 
-test_type = "ASE"
-json_path = "./results/ASE_R50_10_runs.json"
-samples_path = "./results/ASE_samples/samples_"
+# ASE regression ResNet 5 scale
+# python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_regression --test_sample_size 50 --result_json_path ./results/ASE_reg_R50_10_runs.json --seed 1028 --idx_json_path ./results/ASE_regression_samples/samples_50_1028.json --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 
+
+# ASE regression + classification ResNet 5 scale
+# python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_all --test_sample_size 50 --result_json_path ./results/ASE_all_R50_10_runs.json --seed 1028 --idx_json_path ./results/ASE_all_samples/samples_50_1028.json --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 
+
+test_type = "ASE_true_loss_rs"
+json_path = "./results/ASE_true_loss_R50_10_runs.json"
+samples_path = "./results/ASE_true_loss_samples/samples_"
 basic_command = "python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth"
 basic_command += " --active_test_type " + test_type
 basic_command += " --result_json_path " + json_path
 later_command = " --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 "
 
-size_set = [50, 100, 150, 200, 250, 500, 750, 1000, 1500, 2000, 3000]
+# size_set = [50, 100, 150, 200, 250, 500, 750, 1000, 1500, 2000, 3000]
+size_set = [50, 100, 150, 200, 250, 500, 750, 1000]
 random_seed_set = [4519, 9524, 5901, 1028, 6382, 5383, 5095, 7635,  890,  608]
 # random_seed_set = [787, 7139, 3082, 5583, 5404, 5950, 8868, 6872, 6672, 3136, 5427,
 #        2131, 9432, 6930, 9491, 4187, 8110,  481, 3141, 7746, 3549, 4096,
@@ -98,4 +105,4 @@ for size in size_set:
         command = basic_command + " --test_sample_size " + str(size) + " --seed " + str(seed) + " --idx_json_path " + samples_path + str(size) + "_" + str(seed) + ".json" + later_command + ">" + file_path + ".logs" + " 2>" + file_path + ".err&"
         print(command)
         os.system(command)
-        time.sleep(size//4+30)
+        time.sleep(size//5+30)
