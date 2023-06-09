@@ -21,7 +21,7 @@ import util.misc as utils
 import datasets
 from datasets import build_dataset, get_coco_api_from_dataset, test_data_sample
 from engine import evaluate, train_one_epoch, test
-
+import ipdb
 
 
 def get_args_parser():
@@ -116,6 +116,7 @@ def read_idxs_from_json(args):
     return json_object['idx']
 
 def main(args):
+    ipdb.set_trace()
     utils.init_distributed_mode(args)
     # load cfg file and update the args
     print("Loading config file from {}".format(args.config_file))
