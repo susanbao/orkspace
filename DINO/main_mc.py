@@ -116,7 +116,7 @@ def read_idxs_from_json(args):
     return json_object['idx']
 
 def main(args):
-    ipdb.set_trace()
+    # ipdb.set_trace()
     utils.init_distributed_mode(args)
     # load cfg file and update the args
     print("Loading config file from {}".format(args.config_file))
@@ -285,8 +285,9 @@ def main(args):
         base_ds = get_coco_api_from_dataset(dataset_val)
     
     os.environ['EVAL_FLAG'] = 'TRUE'
+    evaluate_path = '/'.join(args.result_json_path.split('/')[:-1]) + "/"
     test_stats, coco_evaluator = evaluate(model, criterion, postprocessors,
-                                          data_loader_val, base_ds, device, args.output_dir, wo_class_error=wo_class_error, args=args)
+                                          data_loader_val, base_ds, device, evaluate_path, wo_class_error=wo_class_error, args=args)
     if args.output_dir:
         utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")
 

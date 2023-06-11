@@ -5,7 +5,7 @@ import json
 import time
 
 # MC ResNet 5 scale
-# python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type $test_type --test_sample_size $size --result_json_path $json_path --seed $seed --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/MC/R50_COCO_31_$size_$seed.logs 2>results/MC/R50_COCO_31_$size_$seed.err&
+# python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type $test_type --test_sample_size size --result_json_path json_path --seed seed --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/MC/R50_COCO_31_$size_$seed.logs 2>results/MC/R50_COCO_31_$size_$seed.err&
 
 # test_type = "MC"
 # json_path = "./results/MC_R50_90_runs.json"

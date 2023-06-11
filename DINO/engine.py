@@ -15,6 +15,7 @@ import torch
 import util.misc as utils
 from datasets.coco_eval import CocoEvaluator
 from datasets.panoptic_eval import PanopticEvaluator
+import json
 
 
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
@@ -118,6 +119,23 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         resstat.update({f'weight_{k}': v for k,v in criterion.weight_dict.items()})
     return resstat
 
+def transform_tensor_to_list(l):
+    return l.cpu().tolist()
+
+def transform_tensors_to_list(l):
+    if torch.is_tensor(l):
+        return transform_tensor_to_list(l)
+    if isinstance(l, list):
+        r = []
+        for i in l:
+            r.append(transform_tensors_to_list(i))
+        return r
+    if isinstance(l, dict):
+        r = {}
+        for k,v in l.items():
+            r[k] = transform_tensors_to_list(v)
+        return r
+    return l
 
 @torch.no_grad()
 def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, output_dir, wo_class_error=False, args=None, logger=None):
@@ -190,7 +208,15 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
             target_sizes = torch.stack([t["size"] for t in targets], dim=0)
             results = postprocessors['segm'](results, outputs, orig_target_sizes, target_sizes)
         res = {target['image_id'].item(): output for target, output in zip(targets, results)}
-
+        
+        stored_outputs = transform_tensors_to_list(outputs)
+        stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
+        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
+        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
+        stored_res = {"input": stored_outputs, "annotation": stored_losses}
+        with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
+            json.dump(stored_res, outfile)
+            
         if coco_evaluator is not None:
             coco_evaluator.update(res)
 
@@ -291,8 +317,7 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
         stats['PQ_all'] = panoptic_res["All"]
         stats['PQ_th'] = panoptic_res["Things"]
         stats['PQ_st'] = panoptic_res["Stuff"]
-
-
+    
 
     return stats, coco_evaluator
 
