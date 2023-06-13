@@ -256,7 +256,7 @@ def main(args):
                 ema_m = ModelEma(model, args.ema_decay)        
 
     # data set
-    # dataset_train = build_dataset(image_set='train', args=args)
+    dataset_train = build_dataset(image_set='train', args=args)
     dataset_val = build_dataset(image_set='val', args=args)
 
     if args.distributed:
@@ -264,6 +264,7 @@ def main(args):
         sampler_val = DistributedSampler(dataset_val, shuffle=False)
     else:
         # sampler_train = torch.utils.data.RandomSampler(dataset_train)
+        sampler_train = torch.utils.data.SequentialSampler(dataset_train)
         idxs = None
         if args.active_test_type[:3] == "ASE":
             idxs = read_idxs_from_json(args)
@@ -274,15 +275,17 @@ def main(args):
 
 #     data_loader_train = DataLoader(dataset_train, batch_sampler=batch_sampler_train,
 #                                    collate_fn=utils.collate_fn, num_workers=args.num_workers)
-    data_loader_val = DataLoader(dataset_val, 1, sampler=sampler_val,
+    data_loader_val = DataLoader(dataset_train, 1, sampler=sampler_train,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
+    # data_loader_val = DataLoader(dataset_val, 1, sampler=sampler_val,
+    #                              drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
     
     if args.dataset_file == "coco_panoptic":
         # We also evaluate AP during panoptic training, on original coco DS
         coco_val = datasets.coco.build("val", args)
         base_ds = get_coco_api_from_dataset(coco_val)
     else:
-        base_ds = get_coco_api_from_dataset(dataset_val)
+        base_ds = get_coco_api_from_dataset(dataset_train)
     
     os.environ['EVAL_FLAG'] = 'TRUE'
     evaluate_path = '/'.join(args.result_json_path.split('/')[:-1]) + "/"

@@ -209,13 +209,14 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
             results = postprocessors['segm'](results, outputs, orig_target_sizes, target_sizes)
         res = {target['image_id'].item(): output for target, output in zip(targets, results)}
         
-        stored_outputs = transform_tensors_to_list(outputs)
-        stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
-        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
-        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
-        stored_res = {"input": stored_outputs, "annotation": stored_losses}
-        with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
-            json.dump(stored_res, outfile)
+        # Store outputs and losses
+        # stored_outputs = transform_tensors_to_list(outputs)
+        # stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
+        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
+        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
+        # stored_res = {"input": stored_outputs, "annotation": stored_losses}
+        # with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
+        #     json.dump(stored_res, outfile)
             
         if coco_evaluator is not None:
             coco_evaluator.update(res)

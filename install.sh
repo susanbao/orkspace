@@ -12,6 +12,9 @@ pip install opencv-python
 apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 pip install pandas
 pip install seaborn
+pip install ipdb
+apt install unzip
+apt install zip
 echo "****************************************************************************************************************************************"
 echo "Complete installing lib for python"
 echo "****************************************************************************************************************************************"
