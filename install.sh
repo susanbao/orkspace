@@ -27,6 +27,9 @@ echo "**************************************************************************
 echo "Complete installing setup!!!"
 echo "****************************************************************************************************************************************"
 
+git config --global user.email "susannju@163.com"
+git config --global user.name "susanbao"
+
 # cd /workspace/orkspace/nuimages
 # ls
 # mkdir val2017
