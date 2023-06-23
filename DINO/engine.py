@@ -211,6 +211,9 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
         
         # Store outputs and losses
         # stored_outputs = transform_tensors_to_list(outputs)
+        # pred_logits = transform_tensors_to_list(outputs['pred_logits'])
+        # pred_boxes = transform_tensors_to_list(outputs['pred_boxes'])
+        # stored_outputs = {'pred_logits': pred_logits, 'pred_boxes': pred_boxes}
         # stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
         # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
         # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
