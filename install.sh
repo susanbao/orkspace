@@ -16,6 +16,13 @@ pip install ipdb
 apt install unzip
 apt install zip
 pip3 install -U scikit-learn
+
+# for ViT
+conda install -y -c conda-forge tensorboard
+git clone https://github.com/NVIDIA/apex
+cd apex
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+pip install ml-collections
 echo "****************************************************************************************************************************************"
 echo "Complete installing lib for python"
 echo "****************************************************************************************************************************************"

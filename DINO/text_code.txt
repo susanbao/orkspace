@@ -34,3 +34,6 @@ python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scal
 CUDA_VISIBLE_DEVICES=1 python main.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
 
 CUDA_VISIBLE_DEVICES=1 python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_mAP --result_json_path ./data/5_scale_31/val/mAP/results_1.json --test_sample_size 1 --seed 5 --start_idx 120 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
+
+# prepare data for ViT (train)
+CUDA_VISIBLE_DEVICES=1 python prepare_data_for_ViT.py >results/prepare_data_for_ViT.logs 2>results/prepare_data_for_ViT.err&
