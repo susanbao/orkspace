@@ -31,10 +31,10 @@ def write_one_results(path, json_data):
     with open(path, "w") as outfile:
         json.dump(json_data, outfile)
         
-def get_numpy_data(data_path, annotation_path, img_nums):
+def get_numpy_data(data_path, annotation_path, start_nums, end_nums):
     X = None
     Y = None
-    for img_idx in range(img_nums):
+    for img_idx in range(start_nums, end_nums):
         results = read_one_image_results(data_path + str(img_idx) + ".json")
         pred_logits = np.array(results['input']['pred_logits'])
         pred_boxes = np.array(results['input']['pred_boxes'])
@@ -74,13 +74,14 @@ def main():
     test_data_path = "./data/5_scale_31/val/data/"
     train_annotation_path = "./data/5_scale_31/train/box_annotation/"
     test_annotation_path = "./data/5_scale_31/val/box_annotation/"
-    train_X, train_Y = get_numpy_data(train_data_path, train_annotation_path, 50000)
+    start_nums = 90000
+    train_X, train_Y = get_numpy_data(train_data_path, train_annotation_path, start_nums, start_nums + 10000)
     base_path = "./data/5_scale_31/"
     split = "train"
-    store_preprocess_inputs_path = base_path + split + f"/pre_data/{split}_box_level_ViT_inputs.npy"
+    store_preprocess_inputs_path = base_path + split + f"/pre_data/{split}_box_level_ViT_inputs_{start_nums}.npy"
     with open(store_preprocess_inputs_path, "wb") as outfile:
         np.save(outfile, train_X)
-    store_preprocess_annotations_path = base_path + split + f"/pre_data/{split}_box_level_ViT_annotations.npy"
+    store_preprocess_annotations_path = base_path + split + f"/pre_data/{split}_box_level_ViT_annotations_{start_nums}.npy"
     with open(store_preprocess_annotations_path, "wb") as outfile:
         np.save(outfile, train_Y)
 
