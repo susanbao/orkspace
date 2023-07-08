@@ -16,6 +16,7 @@ import util.misc as utils
 from datasets.coco_eval import CocoEvaluator
 from datasets.panoptic_eval import PanopticEvaluator
 import json
+from datasets.transforms import transform_tensor_to_list, transform_tensors_to_list
 
 
 def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
@@ -119,24 +120,6 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         resstat.update({f'weight_{k}': v for k,v in criterion.weight_dict.items()})
     return resstat
 
-def transform_tensor_to_list(l):
-    return l.cpu().tolist()
-
-def transform_tensors_to_list(l):
-    if torch.is_tensor(l):
-        return transform_tensor_to_list(l)
-    if isinstance(l, list):
-        r = []
-        for i in l:
-            r.append(transform_tensors_to_list(i))
-        return r
-    if isinstance(l, dict):
-        r = {}
-        for k,v in l.items():
-            r[k] = transform_tensors_to_list(v)
-        return r
-    return l
-
 @torch.no_grad()
 def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, output_dir, wo_class_error=False, args=None, logger=None):
     try:
@@ -181,9 +164,9 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
 
         with torch.cuda.amp.autocast(enabled=args.amp):
             if need_tgt_for_training:
-                outputs = model(samples, targets)
+                outputs = model(samples, targets, args=args, cnt = _cnt)
             else:
-                outputs = model(samples)
+                outputs = model(samples, args=args, cnt = _cnt)
             # outputs = model(samples)
 
             loss_dict = criterion(outputs, targets)

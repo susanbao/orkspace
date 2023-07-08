@@ -84,7 +84,7 @@ def build_model_main(args):
     return model, criterion, postprocessors
 
 def main(args):
-    # ipdb.set_trace()
+    ipdb.set_trace()
     utils.init_distributed_mode(args)
     # load cfg file and update the args
     print("Loading config file from {}".format(args.config_file))

@@ -20,11 +20,13 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torchvision.ops.boxes import nms
+import numpy as np
 
 from util import box_ops
 from util.misc import (NestedTensor, nested_tensor_from_tensor_list,
                        accuracy, get_world_size, interpolate,
                        is_dist_avail_and_initialized, inverse_sigmoid)
+from datasets.transforms import transform_tensor_to_list, transform_tensors_to_list
 
 from .backbone import build_backbone
 from .matcher import build_matcher
@@ -217,8 +219,28 @@ class DINO(nn.Module):
             self.hw_embed = nn.Embedding(1, 1)
         else:
             raise NotImplementedError('Unknown fix_refpoints_hw {}'.format(self.fix_refpoints_hw))
+            
+    def _store_feature(self, hs, args, cnt):
+        # stored_outputs = transform_tensors_to_list(outputs)
+        # pred_logits = transform_tensors_to_list(outputs['pred_logits'])
+        # pred_boxes = transform_tensors_to_list(outputs['pred_boxes'])
+        # stored_outputs = {'pred_logits': pred_logits, 'pred_boxes': pred_boxes}
+        # stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
+        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
+        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
+        # stored_res = {"input": stored_outputs, "annotation": stored_losses}
+        # with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
+        #     json.dump(stored_res, outfile)
+        assert args != None
+        assert cnt >= 0
+        output_dir = '/'.join(args.result_json_path.split('/')[:-1]) + "/feature_data/" + str(cnt) + ".npy"
+        feature = hs[0].cpu().numpy()
+        for i in range(1, len(hs)):
+            feature = np.concatenate((feature, hs[i].cpu().numpy()), axis=0)
+        with open(output_dir, "wb") as outfile:
+            np.save(outfile, feature)
 
-    def forward(self, samples: NestedTensor, targets:List=None):
+    def forward(self, samples: NestedTensor, targets:List=None, args = None, cnt = None):
         """ The forward expects a NestedTensor, which consists of:
                - samples.tensor: batched images, of shape [batch_size x 3 x H x W]
                - samples.mask: a binary mask of shape [batch_size x H x W], containing 1 on padded pixels
@@ -270,6 +292,7 @@ class DINO(nn.Module):
         hs, reference, hs_enc, ref_enc, init_box_proposal = self.transformer(srcs, masks, input_query_bbox, poss,input_query_label,attn_mask)
         # In case num object=0
         hs[0] += self.label_enc.weight[0,0]*0.0
+        self._store_feature(hs, args, cnt)
 
         # deformable-detr-like anchor update
         # reference_before_sigmoid = inverse_sigmoid(reference[:-1]) # n_dec, bs, nq, 4
