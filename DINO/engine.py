@@ -157,6 +157,9 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
     _cnt = 0
     output_state_dict = {} # for debug only
     for samples, targets in metric_logger.log_every(data_loader, 10, header, logger=logger):
+        if _cnt >= 60000:
+            _cnt += 1
+            continue
         samples = samples.to(device)
 
         # targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
@@ -193,16 +196,16 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
         res = {target['image_id'].item(): output for target, output in zip(targets, results)}
         
         # Store outputs and losses
-        # stored_outputs = transform_tensors_to_list(outputs)
-        # pred_logits = transform_tensors_to_list(outputs['pred_logits'])
-        # pred_boxes = transform_tensors_to_list(outputs['pred_boxes'])
-        # stored_outputs = {'pred_logits': pred_logits, 'pred_boxes': pred_boxes}
-        # stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
-        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
-        # stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
-        # stored_res = {"input": stored_outputs, "annotation": stored_losses}
-        # with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
-        #     json.dump(stored_res, outfile)
+        stored_outputs = transform_tensors_to_list(outputs)
+        pred_logits = transform_tensors_to_list(outputs['pred_logits'])
+        pred_boxes = transform_tensors_to_list(outputs['pred_boxes'])
+        stored_outputs = {'pred_logits': pred_logits, 'pred_boxes': pred_boxes}
+        stored_losses = {'loss': transform_tensors_to_list(sum(loss_dict_reduced_scaled.values()))}
+        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_scaled))
+        stored_losses.update(transform_tensors_to_list(loss_dict_reduced_unscaled))
+        stored_res = {"input": stored_outputs, "annotation": stored_losses}
+        with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
+            json.dump(stored_res, outfile)
             
         if coco_evaluator is not None:
             coco_evaluator.update(res)

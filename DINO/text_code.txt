@@ -28,14 +28,14 @@ CUDA_VISIBLE_DEVICES=1 nohup python run_commands.py >results/mAP_sample_1_each.l
 
 python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type None --result_json_path ./data/5_scale_31/val/summary_feature.json --test_sample_size 50000 --seed 5 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/R50_COCO_31_generate_val_data.logs 2>results/R50_COCO_31_generate_val_data.err&
 
-python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type None --result_json_path ./data/5_scale_31/train/summary_feature.json --test_sample_size 50000 --seed 5 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/R50_COCO_31_generate_val_data.logs 2>results/R50_COCO_31_generate_val_data.err&
+CUDA_VISIBLE_DEVICES=1 python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type None --result_json_path ./data/5_scale_31/train/summary_feature_60000.json --test_sample_size 60000 --seed 5 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/R50_COCO_31_generate_val_data.logs 2>results/R50_COCO_31_generate_val_data.err&
 
 python main_mc.py --output_dir logs/DINO/R50_COCO_temp -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_regression --test_sample_size 50 --result_json_path ./data/5_scale_31/val/summary.json --seed 1028 --idx_json_path ./results/ASE_regression_samples/samples_50_1028.json --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 
 
 
-CUDA_VISIBLE_DEVICES=1 python main.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
+CUDA_VISIBLE_DEVICES=0 python main.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
 
-CUDA_VISIBLE_DEVICES=1 python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_mAP --result_json_path ./data/5_scale_31/val/mAP/results_1.json --test_sample_size 1 --seed 5 --start_idx 120 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
+CUDA_VISIBLE_DEVICES=0 python main_mc.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --active_test_type ASE_mAP --result_json_path ./data/5_scale_31/train/mAP/results_1.json --test_sample_size 1 --seed 5 --start_idx 120 --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0
 
 # prepare data for ViT (train)
 CUDA_VISIBLE_DEVICES=1 python prepare_data_for_ViT.py >results/prepare_data_for_ViT.logs 2>results/prepare_data_for_ViT.err&
@@ -44,5 +44,5 @@ CUDA_VISIBLE_DEVICES=0 python prepare_data_for_ViT.py --start_nums 4000 >results
 
 CUDA_VISIBLE_DEVICES=1 python prepare_data_for_ViT.py --end_nums 5000 --split val >results/prepare_data_for_ViT_test.logs 2>results/prepare_data_for_ViT_test.err&
 
-CUDA_VISIBLE_DEVICES=1 python prepare_data_for_ViT.py --end_nums 30000 --split train >results/prepare_data_for_ViT.logs 2>results/prepare_data_for_ViT.err&
+CUDA_VISIBLE_DEVICES=0 python prepare_data_for_ViT.py --start_nums 30000 --end_nums 60000 --split train >results/prepare_data_for_ViT.logs 2>results/prepare_data_for_ViT.err&
 

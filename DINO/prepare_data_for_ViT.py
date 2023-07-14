@@ -119,10 +119,10 @@ def get_feature_data(data_path, annotation_path, feature_path, start_nums, end_n
             print(f"{img_idx} finished")
     return X, Y
 
-def prepare_feature_data(data_path, annotation_path, feature_path, end_nums, stored_path):
+def prepare_feature_data(data_path, annotation_path, feature_path, start_nums, end_nums, stored_path):
     Y = None
-    count = 0
-    for img_idx in range(end_nums):
+    count = 271162
+    for img_idx in range(start_nums, end_nums):
         feature = np_read(feature_path + str(img_idx) + ".npy")
         new_feature = np.zeros((1, feature.shape[1], feature.shape[2]*feature.shape[0]))
         steps = feature.shape[2]
@@ -153,7 +153,7 @@ def prepare_feature_data(data_path, annotation_path, feature_path, end_nums, sto
             Y = np.concatenate((Y, loss))
         if img_idx % 100 == 0:
             print(f"{img_idx} finished")
-    np_write(Y, stored_path + "annotation.npy")
+    np_write(Y, stored_path + "annotation_1.npy")
     return
 
 def main():
@@ -178,11 +178,11 @@ def main():
     if split == "val":
         # train_X, train_Y = get_feature_data(test_data_path, test_annotation_path, test_feature_path, start_nums, start_nums + 1000)
         stored_file = base_path + split + "/feature_pre_data/"
-        prepare_feature_data(test_data_path, test_annotation_path, test_feature_path, end_nums, stored_file)
+        prepare_feature_data(test_data_path, test_annotation_path, test_feature_path, start_nums, end_nums, stored_file)
     elif split == "train":
         # train_X, train_Y = get_feature_data(train_data_path, train_annotation_path, train_feature_path, start_nums, start_nums + 1000)
         stored_file = base_path + split + "/feature_pre_data/"
-        prepare_feature_data(train_data_path, train_annotation_path, train_feature_path, end_nums, stored_file)
+        prepare_feature_data(train_data_path, train_annotation_path, train_feature_path, start_nums, end_nums, stored_file)
     else:
         assert False
     # train_X, train_Y = get_feature_data(train_data_path, train_annotation_path, train_feature_path, start_nums, start_nums + 10000)

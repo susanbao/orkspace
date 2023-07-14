@@ -231,6 +231,8 @@ class DINO(nn.Module):
         # stored_res = {"input": stored_outputs, "annotation": stored_losses}
         # with open(output_dir + "data/" + str(_cnt) + ".json", "w") as outfile:
         #     json.dump(stored_res, outfile)
+        if cnt == None:
+            return
         assert args != None
         assert cnt >= 0
         output_dir = '/'.join(args.result_json_path.split('/')[:-1]) + "/feature_data/" + str(cnt) + ".npy"
