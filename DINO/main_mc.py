@@ -79,6 +79,8 @@ def get_args_parser():
     parser.add_argument('--result_json_path', type=str, default='', help='path of json file which save loss/AP/AR result')
     parser.add_argument('--idx_json_path', type=str, default='', help='path of json file which contain the indexes')
     parser.add_argument('--start_idx', default=0, type=int,help='start index of the sampling')
+    parser.add_argument("--split", type=str, default="val",
+                        help="split type: val or train.")
     
     return parser
 
@@ -280,18 +282,22 @@ def main(args):
 
 #     data_loader_train = DataLoader(dataset_train, batch_sampler=batch_sampler_train,
 #                                    collate_fn=utils.collate_fn, num_workers=args.num_workers)
-    data_loader_val = DataLoader(dataset_train, 1, sampler=sampler_train,
-                                 drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
-    # data_loader_val = DataLoader(dataset_val, 1, sampler=sampler_val,
-    #                              drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
+    if args.split == "train":
+        data_loader_val = DataLoader(dataset_train, 1, sampler=sampler_train,
+                                     drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
+    else:
+        data_loader_val = DataLoader(dataset_val, 1, sampler=sampler_val,
+                                     drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
     
     if args.dataset_file == "coco_panoptic":
         # We also evaluate AP during panoptic training, on original coco DS
         coco_val = datasets.coco.build("val", args)
         base_ds = get_coco_api_from_dataset(coco_val)
     else:
-        base_ds = get_coco_api_from_dataset(dataset_train)
-        # base_ds = get_coco_api_from_dataset(dataset_val)
+        if args.split == "train":
+            base_ds = get_coco_api_from_dataset(dataset_train)
+        else:
+            base_ds = get_coco_api_from_dataset(dataset_val)
     
     os.environ['EVAL_FLAG'] = 'TRUE'
     evaluate_path = '/'.join(args.result_json_path.split('/')[:-1]) + "/"
