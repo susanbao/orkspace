@@ -2,6 +2,8 @@
 tar -zcvf orkspace.tar.gz ./orkspace
 tar -zxvf orkspace.tar.gz
 
+To rerun we need to generate feature data in ./feature_data/ by using function _store_feature.
+
 #Test on COCO
 python main.py --output_dir logs/DINO/R50_COCO_31 -c config/DINO/DINO_5scale.py --coco_path ../coco/ --eval --resume ./ckpts/checkpoint0031_5scale.pth --options dn_scalar=100 embed_init_tgt=TRUE dn_label_coef=1.0 dn_bbox_coef=1.0 use_ema=False dn_box_noise_scale=1.0 >results/R50_COCO_31.logs 2>results/R50_COCO_31.err&
 
