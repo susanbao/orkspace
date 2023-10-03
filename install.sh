@@ -7,6 +7,8 @@ echo "**************************************************************************
 
 cd ./DINO
 ls
+pip install numpy
+conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=10.2 -c pytorch
 pip install -r requirements.txt
 pip install opencv-python
 apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
@@ -21,10 +23,12 @@ pip3 install -U scikit-learn
 conda install -y -c conda-forge tensorboard
 git clone https://github.com/NVIDIA/apex
 cd apex
-pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+#pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+python setup.py install
 pip install ml-collections
 pip install wandb
 pip install sockets
+pip install yapf==0.40.1
 echo "****************************************************************************************************************************************"
 echo "Complete installing lib for python"
 echo "****************************************************************************************************************************************"

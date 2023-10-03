@@ -1,0 +1,50 @@
+__pycache__/
+# C extensions
+*.so
+
+# mypy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+ckpts/
+logs/
+.pth
+nuimages/
+.err
+.log
+results/
+train2017/
+val2017/
+DINO/swin_large_patch4_window12_384_22k.pth
+coco/
+data/
+build/
+DINO/models/dino/ops/
+coco
+PKG-INFO
+SOURCES.txt
+MultiScaleDeformableAttention-1.0-py3.7-linux-x86_64.egg

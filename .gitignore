@@ -42,3 +42,9 @@ val2017/
 DINO/swin_large_patch4_window12_384_22k.pth
 coco/
 data/
+build/
+DINO/models/dino/ops/
+coco
+PKG-INFO
+SOURCES.txt
+MultiScaleDeformableAttention-1.0-py3.7-linux-x86_64.egg

@@ -1,7 +1,7 @@
 setup.py
-/workspace/orkspace/DINO/models/dino/ops/src/vision.cpp
-/workspace/orkspace/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.cpp
-/workspace/orkspace/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.cu
+/data/active_testing/active_testing_det/orkspace/DINO/models/dino/ops/src/vision.cpp
+/data/active_testing/active_testing_det/orkspace/DINO/models/dino/ops/src/cpu/ms_deform_attn_cpu.cpp
+/data/active_testing/active_testing_det/orkspace/DINO/models/dino/ops/src/cuda/ms_deform_attn_cuda.cu
 MultiScaleDeformableAttention.egg-info/PKG-INFO
 MultiScaleDeformableAttention.egg-info/SOURCES.txt
 MultiScaleDeformableAttention.egg-info/dependency_links.txt
